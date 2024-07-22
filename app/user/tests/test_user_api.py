@@ -33,7 +33,7 @@ class PublicUserApiTests(TestCase):
         res = self.client.post(CREATE_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        user = get_user_model().objects.get(**res.data)
+        user = get_user_model().objects.get(email=payload['email'])
         self.assertTrue(user.check_password(payload['password']))
         self.assertNotIn('password', res.data)
 
@@ -52,9 +52,9 @@ class PublicUserApiTests(TestCase):
     def test_password_too_short_error(self):
         """Test an  error is returned if password is less than 5 charcters."""
         payload = {
-            'email':'test@example.com',
+            'email':'test@example1.com',
             'password': 'pw',
-            'name': 'Test Name',
+            'name': 'Test name',
         }
 
         res = self.client.post(CREATE_USER_URL, payload)
